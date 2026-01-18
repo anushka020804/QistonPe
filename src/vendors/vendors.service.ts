@@ -4,15 +4,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { PurchaseOrderStatus } from '../common/enums/purchase-order-status.enum';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
 import { Vendor } from './entities/vendor.entity';
 
 @Injectable()
 export class VendorsService {
-  constructor(@InjectRepository(Vendor) private readonly repo: Repository<Vendor>) {}
+  constructor(
+    @InjectRepository(Vendor) private readonly repo: Repository<Vendor>,
+    @InjectDataSource() private readonly dataSource: DataSource,
+  ) {}
 
   async create(dto: CreateVendorDto) {
     await this.ensureUnique(dto.name, dto.email);
@@ -29,11 +33,34 @@ export class VendorsService {
     if (!vendor) {
       throw new NotFoundException('Vendor not found');
     }
-    return vendor;
+
+    // Calculate payment summary
+    const summary = await this.dataSource
+      .createQueryBuilder()
+      .select('COALESCE(SUM(po.total_amount), 0)', 'totalAmount')
+      .addSelect('COALESCE(SUM(po.paid_amount), 0)', 'paidAmount')
+      .addSelect('COALESCE(SUM(po.outstanding_amount), 0)', 'outstandingAmount')
+      .from('purchase_orders', 'po')
+      .where('po."vendorId" = :vendorId', { vendorId: id })
+      .andWhere('po.deleted_at IS NULL')
+      .andWhere('po.status != :cancelled', { cancelled: PurchaseOrderStatus.CANCELLED })
+      .getRawOne();
+
+    return {
+      ...vendor,
+      paymentSummary: {
+        totalAmount: Number(summary?.totalAmount ?? 0),
+        paidAmount: Number(summary?.paidAmount ?? 0),
+        outstandingAmount: Number(summary?.outstandingAmount ?? 0),
+      },
+    };
   }
 
   async update(id: string, dto: UpdateVendorDto) {
-    const vendor = await this.findOne(id);
+    const vendor = await this.repo.findOne({ where: { id } });
+    if (!vendor) {
+      throw new NotFoundException('Vendor not found');
+    }
 
     if (dto.name || dto.email) {
       await this.ensureUnique(dto.name ?? vendor.name, dto.email ?? vendor.email, id);
@@ -44,7 +71,10 @@ export class VendorsService {
   }
 
   async remove(id: string) {
-    const vendor = await this.findOne(id);
+    const vendor = await this.repo.findOne({ where: { id } });
+    if (!vendor) {
+      throw new NotFoundException('Vendor not found');
+    }
     await this.repo.softRemove(vendor);
     return { message: 'Vendor removed' };
   }
