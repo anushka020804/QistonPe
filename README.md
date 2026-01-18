@@ -71,16 +71,7 @@ A comprehensive vendor payment tracking system that allows businesses to manage 
    
    Fill in your `.env` file:
    ```env
-   PORT=3000
-   DB_HOST=your-supabase-host.pooler.supabase.com
-   DB_PORT=5432
-   DB_USERNAME=postgres.your-project-ref
-   DB_PASSWORD=your-password
-   DB_NAME=postgres
-   DB_SSL=true
-   JWT_SECRET=your-secret-key
-   JWT_EXPIRES_IN=1d
-   ```
+
 
 ### Database Setup and Migrations
 
@@ -614,3 +605,4 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
