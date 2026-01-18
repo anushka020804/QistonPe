@@ -444,19 +444,6 @@ curl -X GET $BASE_URL/api/analytics/aging \
 
 ---
 
-## Time Breakdown
-
-| Task | Hours | Notes |
-|------|-------|-------|
-| **Database Design** | 4 | Schema normalization, relationships, migration files |
-| **API Development** | 12 | Endpoints, business logic, authentication, validation |
-| **Business Logic** | 6 | Status auto-update, outstanding calculations, transactions |
-| **Testing & Debugging** | 4 | Fix 500 errors, test edge cases, verify business rules |
-| **Documentation** | 2 | README, Swagger, code comments |
-| **Deployment** | 2 | Render setup, environment configuration |
-| **Total** | **30 hours** | |
-
----
 
 ## Additional Information
 
@@ -605,4 +592,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
 
