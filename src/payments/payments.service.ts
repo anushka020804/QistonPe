@@ -25,10 +25,11 @@ export class PaymentsService {
     await queryRunner.startTransaction();
 
     try {
-      const po = await queryRunner.manager.findOne(PurchaseOrder, {
-        where: { id: dto.purchaseOrderId },
-        lock: { mode: 'pessimistic_write' },
-      });
+      const po = await queryRunner.manager
+        .createQueryBuilder(PurchaseOrder, 'po')
+        .where('po.id = :id', { id: dto.purchaseOrderId })
+        .setLock('pessimistic_write')
+        .getOne();
 
       if (!po) throw new NotFoundException('Purchase order not found');
       if (po.status === PurchaseOrderStatus.CANCELLED) {

@@ -39,7 +39,7 @@ export class AnalyticsService {
       FROM (
         SELECT
           po.outstanding_amount,
-          GREATEST(0, CAST(EXTRACT(DAY FROM (CURRENT_DATE - po.due_date)) AS INT)) AS days_overdue
+          GREATEST(0, (CURRENT_DATE - po.due_date)::INT) AS days_overdue
         FROM purchase_orders po
         WHERE po.deleted_at IS NULL
           AND po.status NOT IN ('CANCELLED')
