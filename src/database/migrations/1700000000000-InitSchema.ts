@@ -7,7 +7,7 @@ export class InitSchema1700000000000 implements MigrationInterface {
     await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.query("CREATE TYPE \"vendors_payment_term_enum\" AS ENUM('0','15','30','45','60')");
     await queryRunner.query(
-      "CREATE TABLE \"vendors\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"name\" character varying NOT NULL, \"contact_person\" character varying, \"email\" character varying NOT NULL, \"phone_number\" character varying, \"payment_term\" \"vendors_payment_term_enum\" NOT NULL DEFAULT '30', \"is_active\" boolean NOT NULL DEFAULT true, \"created_at\" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), \"updated_at\" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), \"deleted_at\" TIMESTAMP WITH TIME ZONE, CONSTRAINT \"UQ_vendor_name\" UNIQUE (\"name\"), CONSTRAINT \"UQ_vendor_email\" UNIQUE (\"email\"), CONSTRAINT \"PK_vendor_id\" PRIMARY KEY (\"id\"))",
+      "CREATE TABLE \"vendors\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"name\" character varying NOT NULL, \"email\" character varying NOT NULL, \"payment_term\" \"vendors_payment_term_enum\" NOT NULL DEFAULT '30', \"is_active\" boolean NOT NULL DEFAULT true, \"created_at\" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), \"updated_at\" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), \"deleted_at\" TIMESTAMP WITH TIME ZONE, CONSTRAINT \"UQ_vendor_name\" UNIQUE (\"name\"), CONSTRAINT \"UQ_vendor_email\" UNIQUE (\"email\"), CONSTRAINT \"PK_vendor_id\" PRIMARY KEY (\"id\"))",
     );
 
     await queryRunner.query(

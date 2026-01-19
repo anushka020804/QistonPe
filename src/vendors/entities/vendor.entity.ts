@@ -18,14 +18,8 @@ export class Vendor {
   @Column({ unique: true })
   name: string;
 
-  @Column({ nullable: true, name: 'contact_person' })
-  contactPerson?: string;
-
   @Column({ unique: true })
   email: string;
-
-  @Column({ nullable: true, name: 'phone_number' })
-  phoneNumber?: string;
 
   @Column({ type: 'enum', enum: PaymentTerm, default: PaymentTerm.NET_30, name: 'payment_term' })
   paymentTerm: PaymentTerm;

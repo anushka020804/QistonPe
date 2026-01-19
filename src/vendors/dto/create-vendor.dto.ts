@@ -7,19 +7,9 @@ export class CreateVendorDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  contactPerson?: string;
-
   @ApiProperty()
   @IsEmail()
   email: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  phoneNumber?: string;
 
   @ApiProperty({ enum: PaymentTerm, default: PaymentTerm.NET_30 })
   @IsEnum(PaymentTerm)
