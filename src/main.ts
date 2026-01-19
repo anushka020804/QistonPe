@@ -28,7 +28,22 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Vendor Payment System')
-    .setDescription('MSME vendor payment tracking API')
+    .setDescription(
+      'MSME vendor payment tracking API\n\n' +
+      '## Understanding Schemas Section\n\n' +
+      '**DTOs (Data Transfer Objects)** - API request/response formats:\n' +
+      '- Shows what data to send in API requests (e.g., CreateVendorDto, CreatePaymentDto)\n' +
+      '- Only includes fields you provide (no auto-generated IDs or timestamps)\n' +
+      '- Contains validation rules for input data\n\n' +
+      '**Database Entities** - Complete database table structures:\n' +
+      '- Shows the full database schema (e.g., Vendor, PurchaseOrder, Payment)\n' +
+      '- Includes all fields: IDs, timestamps, relationships, system fields\n' +
+      '- Represents what is actually stored in the database\n\n' +
+      '**Example:**\n' +
+      '- Use `CreateVendorDto` to see what to send in POST /vendors\n' +
+      '- Check `Vendor` entity to see the complete database structure\n\n' +
+      '**Authentication:** All endpoints (except /auth/login) require Bearer token authentication.'
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .build();
